@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 
 interface Room {
@@ -12,22 +13,28 @@ interface Room {
 
 function Dashboard() {
   const [rooms, setRooms] = useState<Room[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchRooms() {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get("http://localhost:3000/api/rooms", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setRooms(response.data);
+      try {
+        const response = await axios.get("http://localhost:3000/api/rooms", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setRooms(response.data);
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
+      }
     }
 
     fetchRooms();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-stone-50 p-8">
