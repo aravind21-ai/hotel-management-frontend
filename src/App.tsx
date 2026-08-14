@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Guests from "./pages/Guests";
+import Reservations from "./pages/Reservations";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("token");
@@ -31,6 +32,14 @@ function App() {
           element={
             <ProtectedRoute>
              <Guests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reservations"
+          element={
+            <ProtectedRoute>
+             <Reservations />
             </ProtectedRoute>
           }
         />
