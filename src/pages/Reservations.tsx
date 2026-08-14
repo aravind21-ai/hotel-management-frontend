@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import SearchableSelect from "../components/SearchableSelect";
 
 interface Guest {
   id: string;
@@ -33,6 +34,11 @@ function Reservations() {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [error, setError] = useState("");
+
+  const [showAddGuest, setShowAddGuest] = useState(false);
+  const [newGuestName, setNewGuestName] = useState("");
+  const [newGuestEmail, setNewGuestEmail] = useState("");
+  const [newGuestPhone, setNewGuestPhone] = useState("");
 
   const navigate = useNavigate();
 
@@ -87,6 +93,29 @@ function Reservations() {
     }
   }
 
+  async function handleCreateGuest(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `${API}/guests`,
+        { name: newGuestName, email: newGuestEmail, phone: newGuestPhone },
+        authHeaders()
+      );
+
+      const createdGuest = response.data;
+      setGuests((prev) => [...prev, createdGuest]);
+      setGuestId(createdGuest.id);
+
+      setNewGuestName("");
+      setNewGuestEmail("");
+      setNewGuestPhone("");
+      setShowAddGuest(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function handleCheckIn(id: string) {
     await axios.patch(`${API}/reservations/${id}/check-in`, {}, authHeaders());
     fetchAll();
@@ -101,25 +130,27 @@ function Reservations() {
     <div className="min-h-screen bg-stone-50 p-8">
       <h1 className="text-3xl font-bold text-stone-800 mb-6">Reservations</h1>
 
-      <form onSubmit={handleCreate} className="bg-white p-4 rounded-lg shadow border border-stone-200 mb-8 flex flex-wrap gap-3 items-end">
-        <div>
+      <form onSubmit={handleCreate} className="bg-white p-4 rounded-lg shadow border border-stone-200 mb-8 flex flex-wrap gap-3 items-start">
+        <div className="w-48">
           <label className="block text-xs text-stone-500 mb-1">Guest</label>
-          <select value={guestId} onChange={(e) => setGuestId(e.target.value)} className="border border-stone-300 rounded px-2 py-1 text-sm" required>
-            <option value="">Select guest</option>
-            {guests.map((g) => (
-              <option key={g.id} value={g.id}>{g.name}</option>
-            ))}
-          </select>
+          <SearchableSelect
+            options={guests.map((g) => ({ id: g.id, label: g.name }))}
+            value={guestId}
+            onChange={setGuestId}
+            placeholder="Search guest..."
+            onAddNew={() => setShowAddGuest(true)}
+            addNewLabel="Add new guest"
+          />
         </div>
 
-        <div>
+        <div className="w-48">
           <label className="block text-xs text-stone-500 mb-1">Room</label>
-          <select value={roomId} onChange={(e) => setRoomId(e.target.value)} className="border border-stone-300 rounded px-2 py-1 text-sm" required>
-            <option value="">Select room</option>
-            {rooms.map((r) => (
-              <option key={r.id} value={r.id}>Room {r.number}</option>
-            ))}
-          </select>
+          <SearchableSelect
+            options={rooms.map((r) => ({ id: r.id, label: `Room ${r.number}` }))}
+            value={roomId}
+            onChange={setRoomId}
+            placeholder="Search room..."
+          />
         </div>
 
         <div>
@@ -132,12 +163,59 @@ function Reservations() {
           <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="border border-stone-300 rounded px-2 py-1 text-sm" required />
         </div>
 
-        <button type="submit" className="bg-green-700 text-white rounded px-4 py-2 text-sm font-medium hover:bg-green-800">
+        <button type="submit" className="bg-green-700 text-white rounded px-4 py-2 text-sm font-medium hover:bg-green-800 mt-4">
           Create Reservation
         </button>
 
         {error && <p className="text-red-600 text-sm w-full">{error}</p>}
       </form>
+
+      {showAddGuest && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <form onSubmit={handleCreateGuest} className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-semibold text-stone-800 mb-4">Add New Guest</h2>
+
+            <input
+              type="text"
+              placeholder="Full name"
+              value={newGuestName}
+              onChange={(e) => setNewGuestName(e.target.value)}
+              className="w-full border border-stone-300 rounded px-3 py-2 mb-3 text-sm"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={newGuestEmail}
+              onChange={(e) => setNewGuestEmail(e.target.value)}
+              className="w-full border border-stone-300 rounded px-3 py-2 mb-3 text-sm"
+            />
+            <input
+              type="text"
+              placeholder="Phone"
+              value={newGuestPhone}
+              onChange={(e) => setNewGuestPhone(e.target.value)}
+              className="w-full border border-stone-300 rounded px-3 py-2 mb-4 text-sm"
+            />
+
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setShowAddGuest(false)}
+                className="px-4 py-2 text-sm rounded border border-stone-300 text-stone-600 hover:bg-stone-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 text-sm rounded bg-green-700 text-white hover:bg-green-800"
+              >
+                Save Guest
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="space-y-3">
         {reservations.map((r) => (
