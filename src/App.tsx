@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Rooms from "./pages/Rooms";
 import Guests from "./pages/Guests";
 import Reservations from "./pages/Reservations";
+import Layout from "./components/Layout";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("token");
@@ -19,33 +21,53 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Layout>
+                <Dashboard />
+              </Layout>
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/rooms"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Rooms />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/guests"
           element={
             <ProtectedRoute>
-             <Guests />
+              <Layout>
+                <Guests />
+              </Layout>
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/reservations"
           element={
             <ProtectedRoute>
-             <Reservations />
-            </ProtectedRoute>
+              <Layout>
+                <Reservations />
+              </Layout>
+            </ProtectedRoute> 
           }
         />
       </Routes>
     </BrowserRouter>
   );
 }
-
+        
 export default App;

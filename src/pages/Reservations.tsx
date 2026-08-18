@@ -127,7 +127,7 @@ function Reservations() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 p-8">
+    <div>
       <h1 className="text-3xl font-bold text-stone-800 mb-6">Reservations</h1>
 
       <form onSubmit={handleCreate} className="bg-white p-4 rounded-lg shadow border border-stone-200 mb-8 flex flex-wrap gap-3 items-start">
