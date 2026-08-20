@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { hasRole } from "../lib/auth";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,11 +17,13 @@ function Layout({ children }: LayoutProps) {
   }
 
   const navItems = [
-  { to: "/", label: "Dashboard" },
-  { to: "/rooms", label: "Rooms" },
-  { to: "/guests", label: "Guests" },
-  { to: "/reservations", label: "Reservations" },
-];
+    { to: "/", label: "Dashboard" },
+    { to: "/rooms", label: "Rooms" },
+    { to: "/guests", label: "Guests" },
+    { to: "/reservations", label: "Reservations" },
+    ...(hasRole("ADMIN") ? [{ to: "/staff", label: "Staff" }] : []),
+  ];
+
   return (
     <div className="min-h-screen bg-background flex">
       <aside className="w-56 bg-surface border-r border-border flex flex-col">

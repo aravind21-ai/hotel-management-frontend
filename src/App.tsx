@@ -3,7 +3,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Rooms from "./pages/Rooms";
 import Guests from "./pages/Guests";
+import GuestDetail from "./pages/GuestDetail";
 import Reservations from "./pages/Reservations";
+import Staff from "./pages/Staff";
 import Layout from "./components/Layout";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -56,18 +58,40 @@ function App() {
         />
 
         <Route
+          path="/guests/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <GuestDetail />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/reservations"
           element={
             <ProtectedRoute>
               <Layout>
                 <Reservations />
               </Layout>
-            </ProtectedRoute> 
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/staff"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Staff />
+              </Layout>
+            </ProtectedRoute>
           }
         />
       </Routes>
     </BrowserRouter>
   );
 }
-        
+
 export default App;
