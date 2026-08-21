@@ -3,6 +3,7 @@
 A full-stack, staff-facing hotel management system for managing reservations, rooms, guests, and employee access.
 
 **Live demo:** [hotel-management-frontend-cyan.vercel.app](https://hotel-management-frontend-cyan.vercel.app)
+
 **Backend API:** [github.com/aravind21-ai/hotel-management-system](https://github.com/aravind21-ai/hotel-management-system)
 
 ---
