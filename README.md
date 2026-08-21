@@ -31,23 +31,23 @@ A full-stack, staff-facing hotel management system for managing reservations, ro
 
 Grandview is a staff-facing hotel management system for managing reservations, room status, guest records, and role-based access for hotel employees.
 
-I work front-of-house at a 5-star hotel in Dublin. This started as a way to kill boredom — building something interactive for my workplace, just to learn web design and software development. It's since turned into a full-stack project where I keep finding more real problems from work worth solving, rather than another generic CRUD tutorial app.
+I work Accommodation and front-of-house at a 5-star luxury hotel in Dublin and was always curious about and interested in how the operations work,  so I wanted to model how hotel operations actually work rather than build another generic CRUD application.
 
-The goal was to make the workflows feel realistic, not just technically functional. When a guest checks out, the room doesn't instantly become bookable again — it moves to CLEANING until housekeeping marks it clean. Double-booking is prevented using actual date-range overlap logic rather than simply checking for matching dates.
+The goal was to make the workflows feel realistic, not just technically functional. When a guest checks out, the room doesn't instantly become bookable again, it moves to "CLEANING" until housekeeping marks it clean. Double-booking is prevented using actual date-range overlap logic rather than simply checking for matching dates.
 
 ---
 
 ## What It Does
 
-- **Role-based authentication and authorization** — JWT-based login with Admin, Receptionist, and Housekeeping roles. Permissions are enforced both in the frontend and backend; hiding a button is not the only security mechanism.
-- **Room management** — Search, filter, and sort rooms, with full CRUD through the UI. Rooms with active or upcoming reservations cannot be deleted.
-- **Guest management** — Create and manage guest records, including a guest detail page showing their complete stay history.
-- **Reservation management** — Create, update, and cancel reservations with backend date-overlap validation to prevent double bookings.
-- **Realistic room lifecycle** — Checking in a guest changes the room to OCCUPIED. Checking out changes it to CLEANING, and a housekeeping action is required before it becomes AVAILABLE again.
-- **Atomic state updates** — Check-in and check-out update the reservation and room together in a single transaction, so they can't fall out of sync.
-- **Admin staff management** — Admins can create staff accounts, change roles, and deactivate accounts; deactivated accounts are blocked at login.
-- **Live dashboard** — Occupancy, room availability, arrivals, departures, and recent activity, all calculated from real database data.
-- **Scalable reservation workflow** — Search-as-you-type guest and room selection (built for a hotel with 150+ rooms, not a dropdown you scroll through), plus inline guest creation without leaving the reservation form.
+- **Role-based authentication and authorization** :— JWT-based login with Admin, Receptionist, and Housekeeping roles. Permissions are enforced both in the frontend and backend; hiding a button is not the only security mechanism.
+- **Room management** :— Search, filter, and sort rooms, with full CRUD through the UI. Rooms with active or upcoming reservations cannot be deleted.
+- **Guest management** :— Create and manage guest records, including a guest detail page showing their complete stay history.
+- **Reservation management** :— Create, update, and cancel reservations with backend date-overlap validation to prevent double bookings.
+- **Realistic room lifecycle** :— Checking in a guest changes the room to OCCUPIED. Checking out changes it to CLEANING, and a housekeeping action is required before it becomes AVAILABLE again.
+- **Atomic state updates** :— Check-in and check-out update the reservation and room together in a single transaction, so they can't fall out of sync.
+- **Admin staff management** :— Admins can create staff accounts, change roles, and deactivate accounts; deactivated accounts are blocked at login.
+- **Live dashboard** :— Occupancy, room availability, arrivals, departures, and recent activity, all calculated from real database data.
+- **Scalable reservation workflow** :— Search-as-you-type guest and room selection (built for a hotel with 150+ rooms, not a dropdown you scroll through), plus inline guest creation without leaving the reservation form.
 
 ---
 
@@ -55,7 +55,7 @@ The goal was to make the workflows feel realistic, not just technically function
 
 ### Server-side authorization
 
-Authorization doesn't depend on the frontend. Protected API routes require authentication, and role-restricted operations are enforced by backend middleware. A Housekeeping account can't create a reservation by calling the API directly — the button being hidden in the UI isn't the actual security boundary.
+Authorization doesn't depend on the frontend. Protected API routes require authentication, and role-restricted operations are enforced by backend middleware. A Housekeeping account can't create a reservation by calling the API directly, the button being hidden in the UI isn't the actual security boundary.
 
 ### Double-booking prevention
 
@@ -71,9 +71,9 @@ This catches partial overlaps and reservations that fall entirely within an exis
 
 Rooms follow an operational workflow:
 
-AVAILABLE → OCCUPIED → CLEANING → AVAILABLE
+AVAILABLE  →  OCCUPIED  →  CLEANING  →  AVAILABLE
 
-A room doesn't become available the moment a guest checks out — it has to be marked clean first.
+A room doesn't become available the moment a guest checks out, it has to be marked clean first.
 
 ### Atomic check-in and check-out
 
@@ -109,7 +109,9 @@ Check-in and check-out update both the reservation and its associated room insid
 ## Tech Stack
 
 **Frontend:** React, TypeScript, Vite, React Router, Axios, Tailwind CSS
+
 **Backend:** Node.js, Express, TypeScript, Prisma ORM, PostgreSQL, JWT, bcrypt
+
 **Deployment:** Vercel (frontend), Render (backend), Neon (PostgreSQL)
 
 ---
@@ -169,7 +171,7 @@ The core hotel workflow is complete, but there's more I want to build:
 - Reservation calendar view
 - Reporting and analytics
 
-This started as a way to kill boredom — building something interactive for my workplace, just to learn web design and software development. It's since turned into a full-stack project where I keep finding more real problems from work worth solving. I'm planning to keep building this well past this point — every shift at work tends to surface another workflow worth modeling.
+This started as a way to kill boredom by just building something interactive for my workplace, just to learn web design and software development. It's since turned into a full-stack project where I keep finding more real problems from work worth solving. I'm planning to keep building this well past this point — every shift at work tends to surface another workflow worth modeling.
 
 ---
 
